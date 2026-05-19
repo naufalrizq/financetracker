@@ -27,7 +27,7 @@ app.use(VueQueryPlugin, {
       queries: {
         staleTime: 1000 * 60 * 5, // 5 minutes
         cacheTime: 1000 * 60 * 10, // 10 minutes
-        retry: (failureCount, error: any) => {
+        retry: (failureCount: number, error: any) => {
           // Don't retry on 4xx errors
           if (error?.response?.status >= 400 && error?.response?.status < 500) {
             return false

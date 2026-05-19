@@ -160,7 +160,7 @@ import { useQuery } from '@tanstack/vue-query'
 import { useToast } from 'vue-toastification'
 import { transactionsApi, accountsApi, categoriesApi } from '@/services/api'
 import { useAuthStore } from '@/stores/auth'
-import type { Transaction, CreateTransactionForm, Account, Category } from '@/types'
+import type { Transaction, CreateTransactionForm } from '@/types'
 
 interface Props {
   transaction?: Transaction | null
@@ -181,7 +181,7 @@ const isEditing = computed(() => !!props.transaction)
 const form = reactive<CreateTransactionForm>({
   account_id: '',
   category_id: '',
-  type: 'expense',
+  type: 'expense' as CreateTransactionForm['type'],
   amount: 0,
   description: '',
   notes: '',
