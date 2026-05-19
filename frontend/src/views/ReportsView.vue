@@ -286,8 +286,8 @@ const averageDailySpending = computed(() => {
 })
 
 const topCategories = computed(() => {
-  const categoryTotals = new Map<number, {
-    id: number
+  const categoryTotals = new Map<string, {
+    id: string
     name: string
     totalAmount: number
     transactionCount: number
@@ -396,14 +396,12 @@ const loadData = async () => {
 const getBudgetSpent = (budget: Budget) => {
   const startDate = new Date(budget.start_date)
   const endDate = new Date(budget.end_date)
-  
   return transactions.value
     .filter(transaction => {
       const transactionDate = new Date(transaction.date)
       const isInPeriod = transactionDate >= startDate && transactionDate <= endDate
       const isExpense = transaction.type === 'expense'
       const matchesCategory = !budget.category_id || transaction.category_id === budget.category_id
-      
       return isInPeriod && isExpense && matchesCategory
     })
     .reduce((sum, transaction) => sum + transaction.amount, 0)
@@ -425,7 +423,8 @@ const getCategoryRankColor = (index: number) => {
   return colors[index] || 'bg-gray-100 text-gray-800'
 }
 
-const formatDate = (dateString: string) => {
+const formatDate = (dateString: string | null | undefined) => {
+  if (!dateString) return 'N/A'
   return new Date(dateString).toLocaleDateString()
 }
 

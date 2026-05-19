@@ -208,14 +208,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed, watch } from 'vue'
+import { ref, reactive, onMounted, watch } from 'vue'
 import { PlusIcon, ArrowUpIcon, ArrowDownIcon } from '@heroicons/vue/24/outline'
 import { api } from '@/services/api'
 import { useAuthStore } from '@/stores/auth'
+import { useCurrency } from '@/composables/useCurrency'
 import type { Transaction, Account, Category } from '@/types'
 
-// Reactive data
 const authStore = useAuthStore()
+const { formatCurrency } = useCurrency()
+
 const loading = ref(false)
 const submitting = ref(false)
 const showAddModal = ref(false)
@@ -224,7 +226,6 @@ const transactions = ref<Transaction[]>([])
 const accounts = ref<Account[]>([])
 const categories = ref<Category[]>([])
 
-// Filters
 const filters = reactive({
   type: '',
   categoryId: '',
@@ -232,9 +233,8 @@ const filters = reactive({
   dateRange: '30'
 })
 
-// Transaction form
 const transactionForm = reactive({
-  id: null as number | null,
+  id: null as string | null,
   type: 'expense' as 'income' | 'expense',
   amount: 0,
   description: '',
@@ -243,31 +243,6 @@ const transactionForm = reactive({
   date: new Date().toISOString().split('T')[0]
 })
 
-// Computed
-const filteredTransactions = computed(() => {
-  let filtered = [...transactions.value]
-  
-  if (filters.type) {
-    filtered = filtered.filter(t => t.type === filters.type)
-  }
-  
-  if (filters.categoryId) {
-    filtered = filtered.filter(t => t.category_id === parseInt(filters.categoryId))
-  }
-  
-  if (filters.accountId) {
-    filtered = filtered.filter(t => t.account_id === parseInt(filters.accountId))
-  }
-  
-  // Date range filter
-  const now = new Date()
-  const daysAgo = new Date(now.getTime() - parseInt(filters.dateRange) * 24 * 60 * 60 * 1000)
-  filtered = filtered.filter(t => new Date(t.date) >= daysAgo)
-  
-  return filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-})
-
-// Methods
 const loadTransactions = async () => {
   try {
     loading.value = true
@@ -301,22 +276,19 @@ const loadCategories = async () => {
 const submitTransaction = async () => {
   try {
     submitting.value = true
-    
     const data = {
       type: transactionForm.type,
       amount: transactionForm.amount,
       description: transactionForm.description,
-      category_id: parseInt(transactionForm.category_id),
-      account_id: parseInt(transactionForm.account_id),
+      category_id: transactionForm.category_id || undefined,
+      account_id: transactionForm.account_id,
       date: transactionForm.date
     }
-    
     if (showEditModal.value && transactionForm.id) {
       await api.put(`/transactions/${transactionForm.id}`, data)
     } else {
       await api.post('/transactions', data)
     }
-    
     await loadTransactions()
     closeModal()
   } catch (error) {
@@ -328,18 +300,17 @@ const submitTransaction = async () => {
 
 const editTransaction = (transaction: Transaction) => {
   transactionForm.id = transaction.id
-  transactionForm.type = transaction.type
+  transactionForm.type = transaction.type === 'transfer' ? 'expense' : transaction.type
   transactionForm.amount = transaction.amount
   transactionForm.description = transaction.description
-  transactionForm.category_id = transaction.category_id.toString()
-  transactionForm.account_id = transaction.account_id.toString()
+  transactionForm.category_id = transaction.category_id ?? ''
+  transactionForm.account_id = transaction.account_id
   transactionForm.date = transaction.date.split('T')[0]
   showEditModal.value = true
 }
 
-const deleteTransaction = async (id: number) => {
+const deleteTransaction = async (id: string) => {
   if (!confirm('Are you sure you want to delete this transaction?')) return
-  
   try {
     await api.delete(`/transactions/${id}`)
     await loadTransactions()
@@ -360,12 +331,13 @@ const closeModal = () => {
   transactionForm.date = new Date().toISOString().split('T')[0]
 }
 
-const getCategoryName = (categoryId: number) => {
+const getCategoryName = (categoryId: string | null) => {
+  if (!categoryId) return 'Uncategorized'
   const category = categories.value.find(c => c.id === categoryId)
   return category?.name || 'Unknown'
 }
 
-const getAccountName = (accountId: number) => {
+const getAccountName = (accountId: string) => {
   const account = accounts.value.find(a => a.id === accountId)
   return account?.name || 'Unknown'
 }
@@ -374,22 +346,8 @@ const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString()
 }
 
-const formatCurrency = (amount: number): string => {
-  const currency = authStore.user?.currency || 'IDR'
-  const locale = currency === 'IDR' ? 'id-ID' : 'en-US'
-  return new Intl.NumberFormat(locale, {
-    style: 'currency',
-    currency,
-    minimumFractionDigits: currency === 'IDR' ? 0 : 2,
-  }).format(amount)
-}
+watch(filters, () => {}, { deep: true })
 
-// Watch filters
-watch(filters, () => {
-  // Filters are reactive, computed will update automatically
-}, { deep: true })
-
-// Lifecycle
 onMounted(() => {
   loadTransactions()
   loadAccounts()

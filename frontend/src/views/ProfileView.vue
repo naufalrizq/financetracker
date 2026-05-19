@@ -399,11 +399,10 @@ const updateProfile = async () => {
     
     await api.put('/user/profile', data)
     
-    // Update auth store
-    authStore.updateUser({
-      ...authStore.user,
-      ...data
-    })
+    // Update local user ref
+    if (authStore.user) {
+      user.value = { ...authStore.user, ...data }
+    }
     
     alert('Profile updated successfully!')
   } catch (error) {
