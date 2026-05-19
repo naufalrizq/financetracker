@@ -395,7 +395,7 @@ const loadData = async () => {
 
 const getBudgetSpent = (budget: Budget) => {
   const startDate = new Date(budget.start_date)
-  const endDate = new Date(budget.end_date)
+  const endDate = budget.end_date ? new Date(budget.end_date) : new Date()
   return transactions.value
     .filter(transaction => {
       const transactionDate = new Date(transaction.date)

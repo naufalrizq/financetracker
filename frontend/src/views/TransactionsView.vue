@@ -211,11 +211,9 @@
 import { ref, reactive, onMounted, watch } from 'vue'
 import { PlusIcon, ArrowUpIcon, ArrowDownIcon } from '@heroicons/vue/24/outline'
 import { api } from '@/services/api'
-import { useAuthStore } from '@/stores/auth'
 import { useCurrency } from '@/composables/useCurrency'
 import type { Transaction, Account, Category } from '@/types'
 
-const authStore = useAuthStore()
 const { formatCurrency } = useCurrency()
 
 const loading = ref(false)

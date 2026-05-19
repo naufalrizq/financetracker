@@ -338,7 +338,7 @@ import {
   PencilIcon,
   TrashIcon,
   HomeIcon,
-  CarIcon,
+  TruckIcon,
   AcademicCapIcon,
   HeartIcon,
   BanknotesIcon,
@@ -364,7 +364,7 @@ const contributionAmount = ref(0)
 
 // Goal form
 const goalForm = reactive({
-  id: null as number | null,
+  id: null as string | null,
   name: '',
   type: '',
   target_amount: 0,
@@ -440,12 +440,12 @@ const editGoal = (goal: Goal) => {
   goalForm.type = goal.type
   goalForm.target_amount = goal.target_amount
   goalForm.current_amount = goal.current_amount
-  goalForm.target_date = goal.target_date.split('T')[0]
+  goalForm.target_date = goal.target_date ? goal.target_date.split('T')[0] : ''
   goalForm.description = goal.description || ''
   showEditModal.value = true
 }
 
-const deleteGoal = async (id: number) => {
+const deleteGoal = async (id: string) => {
   if (!confirm('Are you sure you want to delete this goal?')) return
   
   try {
@@ -531,7 +531,7 @@ const getGoalIcon = (type: string) => {
     emergency_fund: ShieldCheckIcon,
     vacation: HeartIcon,
     house_down_payment: HomeIcon,
-    car_purchase: CarIcon,
+    car_purchase: TruckIcon,
     education: AcademicCapIcon,
     retirement: BanknotesIcon,
     debt_payoff: DocumentTextIcon,
@@ -541,6 +541,7 @@ const getGoalIcon = (type: string) => {
 }
 
 const getDaysRemaining = (goal: Goal) => {
+  if (!goal.target_date) return 'No date set'
   const today = new Date()
   const targetDate = new Date(goal.target_date)
   const diffTime = targetDate.getTime() - today.getTime()
@@ -553,6 +554,7 @@ const getDaysRemaining = (goal: Goal) => {
 }
 
 const getDaysRemainingColor = (goal: Goal) => {
+  if (!goal.target_date) return 'text-gray-600'
   const today = new Date()
   const targetDate = new Date(goal.target_date)
   const diffTime = targetDate.getTime() - today.getTime()
@@ -563,7 +565,8 @@ const getDaysRemainingColor = (goal: Goal) => {
   return 'text-gray-600'
 }
 
-const formatDate = (dateString: string) => {
+const formatDate = (dateString: string | null) => {
+  if (!dateString) return 'No target date'
   return new Date(dateString).toLocaleDateString()
 }
 

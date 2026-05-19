@@ -248,11 +248,11 @@ const showAddModal = ref(false)
 const showEditModal = ref(false)
 const activeTab = ref('all')
 const categories = ref<Category[]>([])
-const transactionCounts = ref<Record<number, number>>({})
+const transactionCounts = ref<Record<string, number>>({})
 
 // Category form
 const categoryForm = reactive({
-  id: null as number | null,
+  id: null as string | null,
   name: '',
   type: '',
   icon: 'ShoppingCartIcon',
@@ -355,7 +355,7 @@ const editCategory = (category: Category) => {
   showEditModal.value = true
 }
 
-const deleteCategory = async (id: number) => {
+const deleteCategory = async (id: string) => {
   const count = transactionCounts.value[id] || 0
   const message = count > 0 
     ? `This category has ${count} transactions. Are you sure you want to delete it?`
@@ -387,7 +387,7 @@ const getCategoryIcon = (iconName: string) => {
   return icon?.component || ShoppingCartIcon
 }
 
-const getCategoryUsage = (categoryId: number) => {
+const getCategoryUsage = (categoryId: string) => {
   return transactionCounts.value[categoryId] || 0
 }
 
