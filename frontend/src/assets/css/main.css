@@ -1,0 +1,645 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Custom CSS Variables */
+:root {
+  --color-primary: #2db85a;
+  --color-primary-dark: #187538;
+  --color-success: #22c55e;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+  --color-info: #06b6d4;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  
+  --border-radius: 0.5rem;
+  --border-radius-lg: 0.75rem;
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  color: #374151;
+  background-color: #f9fafb;
+}
+
+/* Custom Components */
+@layer components {
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-primary {
+    @apply btn bg-primary-600 text-white border-primary-600 hover:bg-primary-700 focus:ring-primary-500;
+  }
+  
+  .btn-secondary {
+    @apply btn bg-gray-100 text-gray-900 border-gray-300 hover:bg-gray-200 focus:ring-gray-500;
+  }
+  
+  .btn-success {
+    @apply btn bg-success-600 text-white border-success-600 hover:bg-success-700 focus:ring-success-500;
+  }
+  
+  .btn-danger {
+    @apply btn bg-danger-600 text-white border-danger-600 hover:bg-danger-700 focus:ring-danger-500;
+  }
+  
+  .btn-outline {
+    @apply btn bg-transparent border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500;
+  }
+  
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+  }
+  
+  .btn-lg {
+    @apply px-6 py-3 text-base;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden;
+  }
+  
+  .card-header {
+    @apply px-6 py-4 border-b border-gray-200 bg-gray-50;
+  }
+  
+  .card-body {
+    @apply px-6 py-4;
+  }
+  
+  .card-footer {
+    @apply px-6 py-4 border-t border-gray-200 bg-gray-50;
+  }
+
+  /* Forms */
+  .form-group {
+    @apply mb-4;
+  }
+  
+  .form-label {
+    @apply block text-sm font-medium text-gray-700 mb-2;
+  }
+  
+  .form-input {
+    @apply block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200;
+  }
+  
+  .form-select {
+    @apply form-input pr-10 bg-white;
+  }
+  
+  .form-textarea {
+    @apply form-input resize-y;
+  }
+  
+  .form-error {
+    @apply mt-1 text-sm text-danger-600;
+  }
+  
+  .form-help {
+    @apply mt-1 text-sm text-gray-500;
+  }
+
+  /* Navigation */
+  .nav-link {
+    @apply flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200;
+  }
+  
+  .nav-link-active {
+    @apply nav-link bg-primary-100 text-primary-700;
+  }
+  
+  .nav-link-inactive {
+    @apply nav-link text-gray-600 hover:bg-gray-100 hover:text-gray-900;
+  }
+
+  /* Tables */
+  .table {
+    @apply min-w-full divide-y divide-gray-200;
+  }
+  
+  .table-header {
+    @apply bg-gray-50;
+  }
+  
+  .table-header-cell {
+    @apply px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider;
+  }
+  
+  .table-body {
+    @apply bg-white divide-y divide-gray-200;
+  }
+  
+  .table-row {
+    @apply hover:bg-gray-50 transition-colors duration-150;
+  }
+  
+  .table-cell {
+    @apply px-6 py-4 whitespace-nowrap text-sm text-gray-900;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  
+  .badge-primary {
+    @apply badge bg-primary-100 text-primary-800;
+  }
+  
+  .badge-success {
+    @apply badge bg-success-100 text-success-800;
+  }
+  
+  .badge-danger {
+    @apply badge bg-danger-100 text-danger-800;
+  }
+  
+  .badge-warning {
+    @apply badge bg-warning-100 text-warning-800;
+  }
+  
+  .badge-gray {
+    @apply badge bg-gray-100 text-gray-800;
+  }
+
+  /* Loading States */
+  .loading-spinner {
+    @apply animate-spin rounded-full border-2 border-gray-300 border-t-primary-600;
+  }
+  
+  .loading-dots {
+    @apply flex space-x-1;
+  }
+  
+  .loading-dot {
+    @apply w-2 h-2 bg-primary-600 rounded-full animate-pulse;
+  }
+
+  /* Alerts */
+  .alert {
+    @apply p-4 rounded-lg border;
+  }
+  
+  .alert-success {
+    @apply alert bg-success-50 border-success-200 text-success-800;
+  }
+  
+  .alert-danger {
+    @apply alert bg-danger-50 border-danger-200 text-danger-800;
+  }
+  
+  .alert-warning {
+    @apply alert bg-warning-50 border-warning-200 text-warning-800;
+  }
+  
+  .alert-info {
+    @apply alert bg-blue-50 border-blue-200 text-blue-800;
+  }
+
+  /* Modals */
+  .modal-overlay {
+    @apply fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity z-50;
+  }
+  
+  .modal-container {
+    @apply fixed inset-0 z-50 overflow-y-auto;
+  }
+  
+  .modal-content {
+    @apply flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0;
+  }
+  
+  .modal-panel {
+    @apply relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    @apply fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out;
+  }
+  
+  .sidebar-header {
+    @apply flex items-center justify-between p-4 border-b border-gray-200;
+  }
+  
+  .sidebar-content {
+    @apply flex-1 overflow-y-auto py-4;
+  }
+  
+  .sidebar-footer {
+    @apply p-4 border-t border-gray-200;
+  }
+
+  /* Stats */
+  .stat-card {
+    @apply card p-6;
+  }
+  
+  .stat-value {
+    @apply text-2xl font-bold text-gray-900;
+  }
+  
+  .stat-label {
+    @apply text-sm font-medium text-gray-500;
+  }
+  
+  .stat-change {
+    @apply text-sm font-medium;
+  }
+  
+  .stat-change-positive {
+    @apply stat-change text-success-600;
+  }
+  
+  .stat-change-negative {
+    @apply stat-change text-danger-600;
+  }
+}
+
+/* Utilities */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .gradient-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  }
+  
+  .gradient-success {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  }
+  
+  .gradient-danger {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-break {
+    page-break-after: always;
+  }
+  
+  .print-avoid-break {
+    page-break-inside: avoid;
+  }
+}
+
+/* ── Dark Mode Overrides ────────────────────────────────────────────
+   Since `darkMode: 'class'` is enabled and class="dark" is on <html>,
+   all shared component classes are overridden here.
+   Individual views use hardcoded Tailwind classes like `text-gray-900`,
+   so we override them at the CSS-class level.
+──────────────────────────────────────────────────────────────────── */
+
+.dark body {
+  background-color: #082410;
+  color: #baefc8;
+  color-scheme: dark;
+}
+
+/* Cards */
+.dark .card {
+  @apply bg-gray-800 border-gray-700;
+  background-color: #10451d !important;
+  border-color: #187538 !important;
+}
+
+.dark .card-header {
+  @apply bg-gray-800 border-gray-700;
+  background-color: #10451d !important;
+  border-color: #187538 !important;
+}
+
+.dark .card-body {
+  @apply bg-gray-800;
+  background-color: #10451d !important;
+}
+
+.dark .card-footer {
+  @apply bg-gray-800 border-gray-700;
+  background-color: #10451d !important;
+  border-color: #187538 !important;
+}
+
+/* Stat Cards */
+.dark .stat-card {
+  @apply bg-gray-800 border-gray-700;
+  background-color: #10451d !important;
+  border-color: #187538 !important;
+}
+
+.dark .stat-value {
+  @apply text-white;
+  color: #baefc8 !important;
+}
+
+.dark .stat-label {
+  @apply text-gray-400;
+  color: #8de3a4 !important;
+}
+
+/* Navigation */
+.dark .nav-link-inactive {
+  @apply text-gray-300 hover:bg-gray-700 hover:text-white;
+  color: #8de3a4 !important;
+}
+.dark .nav-link-inactive:hover {
+  background-color: #145c2c !important;
+  color: #baefc8 !important;
+}
+
+.dark .nav-link-active {
+  background-color: #145c2c !important;
+  color: #baefc8 !important;
+}
+
+/* Tables */
+.dark .table-header {
+  @apply bg-gray-800;
+}
+
+.dark .table-header-cell {
+  @apply text-gray-400;
+}
+
+.dark .table-body {
+  @apply bg-gray-800 divide-gray-700;
+}
+
+.dark .table-row {
+  @apply hover:bg-gray-700;
+}
+
+.dark .table-cell {
+  @apply text-gray-100;
+}
+
+.dark .table {
+  @apply divide-gray-700;
+}
+
+/* Forms */
+.dark .form-label {
+  @apply text-gray-300;
+}
+
+.dark .form-input,
+.dark .form-select,
+.dark .form-textarea {
+  @apply bg-gray-900 border-gray-600 text-white placeholder-gray-500;
+}
+
+.dark .form-input:focus,
+.dark .form-select:focus,
+.dark .form-textarea:focus {
+  border-color: #2db85a !important;
+  box-shadow: 0 0 0 1px #2db85a !important;
+}
+
+/* Modals */
+.dark .modal-panel {
+  @apply bg-gray-800;
+}
+
+/* Sidebar */
+.dark .sidebar {
+  @apply bg-gray-800 border-r border-gray-700;
+}
+
+/* Badges */
+.dark .badge-primary {
+  background-color: #145c2c !important;
+  color: #baefc8 !important;
+}
+
+.dark .badge-success {
+  @apply bg-green-900 text-green-300;
+}
+
+.dark .badge-danger {
+  @apply bg-red-900 text-red-300;
+}
+
+.dark .badge-warning {
+  @apply bg-yellow-900 text-yellow-300;
+}
+
+.dark .badge-gray {
+  @apply bg-gray-700 text-gray-300;
+}
+
+/* Text overrides for hardcoded Tailwind classes in views */
+.dark .text-gray-900 { color: #f1f5f9 !important; }
+.dark .text-gray-800 { color: #e2e8f0 !important; }
+.dark .text-gray-700 { color: #cbd5e1 !important; }
+.dark .text-gray-600 { color: #94a3b8 !important; }
+.dark .text-gray-500 { color: #94a3b8 !important; }
+
+/* Background overrides for hardcoded Tailwind classes in views */
+.dark .bg-white { background-color: #10451d !important; }
+.dark .bg-gray-50 { background-color: #082410 !important; }
+.dark .bg-gray-100 { background-color: #10451d !important; }
+.dark .bg-gray-200 { background-color: #145c2c !important; }
+.dark .bg-gray-300 { background-color: #187538 !important; }
+
+/* ── Stat Card Overrides ─────────────────────────────────────────────
+   Replace garish neon gradients with refined dark cards + left border accent
+──────────────────────────────────────────────────────────────────── */
+.dark .bg-gradient-to-r.from-green-500,
+.dark .bg-gradient-to-r.from-green-500.to-green-600 {
+  background: #10451d !important;
+  border-left: 4px solid #2db85a;
+}
+.dark .bg-gradient-to-r.from-blue-500,
+.dark .bg-gradient-to-r.from-blue-500.to-blue-600 {
+  background: #10451d !important;
+  border-left: 4px solid #56cf78;
+}
+.dark .bg-gradient-to-r.from-purple-500,
+.dark .bg-gradient-to-r.from-purple-500.to-purple-600 {
+  background: #10451d !important;
+  border-left: 4px solid #8de3a4;
+}
+.dark .bg-gradient-to-r.from-red-500,
+.dark .bg-gradient-to-r.from-red-500.to-red-600 {
+  background: #10451d !important;
+  border-left: 4px solid #ef4444;
+}
+.dark .bg-gradient-to-r.from-yellow-500,
+.dark .bg-gradient-to-r.from-yellow-500.to-yellow-600 {
+  background: #10451d !important;
+  border-left: 4px solid #eab308;
+}
+
+/* Make text in refactored stat cards readable */
+.dark [class*="bg-gradient-to-r"][class*="text-white"] h3,
+.dark [class*="bg-gradient-to-r"][class*="text-white"] p {
+  color: #e2e8f0 !important;
+}
+.dark [class*="bg-gradient-to-r"][class*="text-white"] .text-3xl {
+  color: #ffffff !important;
+}
+
+/* Border overrides */
+.dark .border-gray-200 { border-color: #187538 !important; }
+.dark .border-gray-300 { border-color: #1e9645 !important; }
+.dark .border { border-color: #187538 !important; }
+.dark .divide-gray-200 > * + * { border-color: #187538 !important; }
+.dark .divide-y > * + * { border-color: #187538 !important; }
+.dark .border-b { border-color: #187538 !important; }
+
+/* ── Form Elements ─────────────────────────────────────────────── */
+.dark select,
+.dark input[type="text"],
+.dark input[type="email"],
+.dark input[type="password"],
+.dark input[type="number"],
+.dark input[type="date"],
+.dark textarea {
+  background-color: #10451d !important;
+  border-color: #187538 !important;
+  color: #baefc8 !important;
+}
+.dark select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%238de3a4' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
+}
+.dark select:focus,
+.dark input:focus,
+.dark textarea:focus {
+  border-color: #2db85a !important;
+  box-shadow: 0 0 0 1px #2db85a !important;
+}
+
+/* ── Modal Overrides ───────────────────────────────────────────── */
+.dark .bg-black.bg-opacity-50 + div,
+.dark .fixed .bg-white {
+  background-color: #10451d !important;
+}
+
+/* ── Misc UI ───────────────────────────────────────────────────── */
+.dark .bg-green-100 { background-color: rgba(45, 184, 90, 0.15) !important; }
+.dark .bg-red-100 { background-color: rgba(239, 68, 68, 0.15) !important; }
+.dark .bg-yellow-100 { background-color: rgba(234, 179, 8, 0.15) !important; }
+.dark .bg-blue-100 { background-color: rgba(45, 184, 90, 0.15) !important; }
+.dark .bg-purple-100 { background-color: rgba(141, 227, 164, 0.15) !important; }
+
+.dark .text-green-600 { color: #56cf78 !important; }
+.dark .text-red-600 { color: #f87171 !important; }
+.dark .text-yellow-600 { color: #facc15 !important; }
+.dark .text-blue-600 { color: #8de3a4 !important; }
+
+/* Quick action links */
+.dark .hover\:bg-primary-50:hover {
+  background-color: rgba(45, 184, 90, 0.1) !important;
+}
+
+/* Progress bar track */
+.dark .bg-gray-200.rounded-full {
+  background-color: #145c2c !important;
+}
+
+/* Scrollbar */
+.dark ::-webkit-scrollbar-track {
+  background: #082410;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #187538;
+}
